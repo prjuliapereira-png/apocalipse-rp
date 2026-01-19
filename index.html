@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apocalipse RP 🍄‍🟫</title>
+
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<style>
+body {
+  background: radial-gradient(circle, #000 30%, #300 100%);
+  color: #fff;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+h1 {
+  color: #ff4444;
+  text-shadow: 0 0 10px red;
+}
+button {
+  width: 85%;
+  padding: 15px;
+  margin: 8px;
+  font-size: 17px;
+  border-radius: 15px;
+  border: none;
+  background: darkred;
+  color: white;
+}
+.box {
+  background: rgba(0,0,0,0.7);
+  padding: 15px;
+  border-radius: 15px;
+  margin: 8px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🧟 APOCALIPSE RP 🍄‍🟫</h1>
+<p>Sobreviva ao fim do mundo</p>
+
+<div class="box">
+❤️ Vida: <span id="vida">100</span><br>
+🎒 Inventário: <span id="inv">Vazio</span>
+</div>
+
+<button onclick="dado()">🎲 Rolar D20</button>
+<div class="box" id="dado">-</div>
+
+<button onclick="personagem()">🧍 Gerar Personagem</button>
+<div class="box" id="p">-</div>
+
+<button onclick="cenario()">🌪️ Gerar Cenário</button>
+<div class="box" id="c">-</div>
+
+<button onclick="missao()">🎯 Gerar Missão</button>
+<div class="box" id="m">-</div>
+
+<button onclick="combate()">⚔️ Entrar em Combate</button>
+<div class="box" id="combate">-</div>
+
+<script>
+let vida = 100;
+let inventario = [];
+
+function atualizar(){
+  document.getElementById("vida").innerText = vida;
+  document.getElementById("inv").innerText =
+    inventario.length ? inventario.join(", ") : "Vazio";
+}
+
+function dado(){
+  let x = Math.floor(Math.random()*20)+1;
+  let t = "D20: " + x;
+  if(x == 1) t += " 💀 FALHA CRÍTICA";
+  if(x == 20) t += " 🔥 SUCESSO LENDÁRIO";
+  document.getElementById("dado").innerText = t;
+}
+
+let P=["Médica","Atirador","Engenheira","Explorador","Líder","Mensageira","Químico"];
+let C=["Hospital abandonado","Shopping infestado","Rodovia em chamas","Base militar","Cidade submersa","Metrô escuro"];
+let M=["Buscar suprimentos","Resgatar sobrevivente","Escoltar caravana","Explorar sinal estranho","Roubar combustível"];
+let itens=["Kit médico","Munição","Comida","Rádio","Faca"];
+
+function personagem(){
+  document.getElementById("p").innerText = P[Math.floor(Math.random()*P.length)];
+}
+function cenario(){
+  document.getElementById("c").innerText = C[Math.floor(Math.random()*C.length)];
+}
+function missao(){
+  let item = itens[Math.floor(Math.random()*itens.length)];
+  inventario.push(item);
+  atualizar();
+  document.getElementById("m").innerText =
+    M[Math.floor(Math.random()*M.length)] + " (+ " + item + ")";
+}
+function combate(){
+  let dano = Math.floor(Math.random()*20)+5;
+  vida -= dano;
+  document.getElementById("combate").innerText =
+    vida <= 0 ? "💀 Você morreu no apocalipse." : "💥 Dano sofrido: " + dano;
+  if(vida < 0) vida = 0;
+  atualizar();
+}
+
+atualizar();
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js");
+}
+</script>
+
+</body>
+</html>
